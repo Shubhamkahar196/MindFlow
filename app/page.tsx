@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Timer from "@/components/Timer";
 
 export default function Home() {
   
@@ -6,6 +7,7 @@ export default function Home() {
     <div className="bg-custom-gradient min-h-screen">
 
      <Navbar/>
+     <Timer/>
     </div>
   );
 }
