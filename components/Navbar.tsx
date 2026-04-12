@@ -7,7 +7,7 @@ const Navbar = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-extrabold tracking-tighter">MindFlow</h2>
       
-<Button >Login</Button>
+ <Button variant="outline" className="font-bold text-xl border-2 bg-blue-500 text-white py-2 px-6 ">Login</Button>
       </div>
     </div>
   );
