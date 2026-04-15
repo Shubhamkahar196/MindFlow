@@ -1,6 +1,8 @@
+
 import Navbar from "@/components/Navbar";
 import TaskList from "@/components/TaskList";
 import Timer from "@/components/Timer";
+
 
 export default function Home() {
   
@@ -9,7 +11,12 @@ export default function Home() {
 
      <Navbar/>
      <Timer/>
-   <TaskList/>
+          
+<TaskList/>
+          
+
+          
+   
     </div>
   );
 }
