@@ -1,40 +1,54 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import TaskInput from './TaskInput'
-import TaskItem from './TaskItem';
+"use client";
+import React, { useEffect, useState } from "react";
+import TaskInput from "./TaskInput";
+import TaskItem from "./TaskItem";
+import axios from "axios";
+
+type Task = {
+  _id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
+};
 
 const TaskList = () => {
-    const [task,setTasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-    // load from localstorage
-    useEffect(()=>{
-        const saved = localStorage.getItem("task");
-        if(saved){
-            setTasks(JSON.parse(saved));
-        }
-    },[]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get("/api/tasks");
+      setTasks(res.data);
+    };
+    fetchData();
+  }, []);
 
-    // save to localStorage
-    useEffect(()=>{
-        localStorage.setItem("task",JSON.stringify(task));
-    },[task]);
+  const addTask = async (title: string, description: string) => {
+    const res = await axios.post("/api/tasks", {
+      title,
+      description,
+    });
 
-    const addTask = (task:string)=>{
-        setTasks((prev)=> [...prev,task]);
-    }
+    setTasks((prev) => [...prev, res.data]);
+  };
 
-    const deleteTask = (index: number)=>{
-        const updated = task.filter((_,i)=> i !==index);
-   setTasks(updated);
-    }
+  const deleteTask = (id: string) => {
+    const updated = tasks.filter((task) => task._id !== id);
+    setTasks(updated);
+  };
+
   return (
-    <div className='mt-6'>
-        <TaskInput addTask={addTask} />
-        {task.map((task,index)=>(
-            <TaskItem key={index} task={task} onDelete={()=> deleteTask(index)} />
-        ))}
-    </div>
-  )
-}
+    <div className="mt-6">
+      <TaskInput addTask={addTask} />
 
-export default TaskList
+      {tasks.map((task) => (
+        <TaskItem
+          key={task._id}
+          task={task}
+          onDelete={() => deleteTask(task._id)}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default TaskList;

@@ -9,10 +9,11 @@ const taskSchema = new Schema({
         type: String,
     },
     completed: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 })
 
-const Task = mongoose.model("Task",taskSchema);
+const Task = mongoose.models.Task ||  mongoose.model("Task",taskSchema);
 
 export default Task;
