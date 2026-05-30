@@ -1,7 +1,8 @@
 
 import Navbar from "@/components/Navbar";
+import Time from "@/components/Time";
 
-import Home from "@/components/Home"
+
 // import TaskList from "@/components/TaskList";
 // import Timer from "@/components/Timer";
 
@@ -9,10 +10,10 @@ import Home from "@/components/Home"
 export default function Home() {
   
   return (
-    <div className="bg-custom-gradient min-h-screen">
+    <div className="bg-blue-950 min-h-screen">
 
      <Navbar/>
-     <Home/>
+     <Time/>
      {/* <Timer/>
           
 <TaskList/> */}
