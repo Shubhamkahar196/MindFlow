@@ -43,7 +43,7 @@ const Timer = () => {
 
       {/* Dynamic Glassmorphic Timer Card matching Clock */}
       <main className="relative z-10 inline-block mx-auto backdrop-blur-md bg-slate-900/40 border border-slate-800/60 rounded-3xl p-8 sm:p-12 shadow-2xl shadow-indigo-950/20 transform transition hover:scale-[1.01] duration-300 w-full max-w-md">
-        <h3 className="text-6xl sm:text-7xl md:text-8xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-[0_4px_20px_rgba(255,255,255,0.1)] tabular-nums">
+        <h3 className="text-6xl sm:text-7xl md:text-8xl font-black tracking-widest text-transparent bg-clip-text bg-linear-to-b from-white to-slate-400 drop-shadow-[0_4px_20px_rgba(255,255,255,0.1)] tabular-nums">
           {formatTimer(time)}
         </h3>
 
