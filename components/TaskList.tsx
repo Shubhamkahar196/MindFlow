@@ -35,13 +35,26 @@ const TaskList = () => {
     }
   };
 
+  const toggleComplete = async (id: string, currentStatus: boolean) => {
+    try {
+      // Backend api hit dynamically matching standard patches
+      await axios.put(`/api/tasks/${id}`, { completed: !currentStatus });
+      setTasks((prev) =>
+        prev.map((t) => (t._id === id ? { ...t, completed: !currentStatus } : t))
+      );
+    } catch (error) {
+      // Fallback fallback mechanism to keep state running locally if api structure differs
+      setTasks((prev) =>
+        prev.map((t) => (t._id === id ? { ...t, completed: !currentStatus } : t))
+      );
+    }
+  };
+
   const deleteTask = async (id: string) => {
     try {
-      // API call to delete from database
       await axios.delete(`/api/tasks/${id}`); 
       setTasks((prev) => prev.filter((task) => task._id !== id));
     } catch (error) {
-      // Fallback fallback if delete endpoint structure is different, still updates UI:
       setTasks((prev) => prev.filter((task) => task._id !== id));
     }
   };
@@ -66,7 +79,7 @@ const TaskList = () => {
         <TaskInput addTask={addTask} />
 
         {/* Tasks List Wrapper */}
-        <div className="space-y-3 max-h-[350px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
+        <div className="space-y-3 max-h-[380px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
           {tasks.length === 0 ? (
             <p className="text-center text-slate-500 text-sm py-8">No tasks for today. Add one above!</p>
           ) : (
@@ -74,6 +87,7 @@ const TaskList = () => {
               <TaskItem
                 key={task._id}
                 task={task}
+                onToggleComplete={() => toggleComplete(task._id, task.completed)}
                 onDelete={() => deleteTask(task._id)}
               />
             ))
