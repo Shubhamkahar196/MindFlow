@@ -25,9 +25,9 @@ const Footer = () => {
 
         {/* History/Hourglass Link */}
         <li>
-          <Link href="/history" className="flex flex-col items-center gap-1 text-xs font-medium text-zinc-400 transition-colors duration-200 hover:text-white">
+          <Link href="/hours" className="flex flex-col items-center gap-1 text-xs font-medium text-zinc-400 transition-colors duration-200 hover:text-white">
             <Hourglass className="h-5 w-5" />
-            <span>History</span>
+            <span>Timer</span>
           </Link>
         </li>
 
@@ -35,7 +35,7 @@ const Footer = () => {
         <li>
           <Link href="/timer" className="flex flex-col items-center gap-1 text-xs font-medium text-zinc-400 transition-colors duration-200 hover:text-white">
             <TimerIcon className="h-5 w-5" />
-            <span>Timer</span>
+            <span>Focus</span>
           </Link>
         </li>
       </ul>
