@@ -126,9 +126,9 @@ const Hours = () => {
 
       <div className="relative z-10 space-y-10">
         {/* Dynamic Quotes */}
-        <header className="space-y-4 max-w-xl mx-auto min-h-[100px] flex flex-col justify-center">
+        <header className="space-y-4 max-w-xl mx-auto min-h-25 flex flex-col justify-center">
           <p className="text-sm font-semibold tracking-widest text-indigo-400 uppercase">MindFlow Session</p>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-slate-300 to-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-slate-100 via-slate-300 to-slate-100">
             "{MOTIVATIONAL_QUOTES[quoteIndex]}"
           </h2>
         </header>
@@ -207,7 +207,7 @@ const Hours = () => {
 
                 {/* Secs */}
                 <div className={`flex flex-col items-center transition-all duration-150 group-hover:text-indigo-400 ${blinkSec ? "opacity-30 scale-102" : "opacity-100"}`}>
-                  <span className={`text-transparent bg-clip-text bg-gradient-to-b ${COLOR_PALETTES[colorIndex]}`}>
+                  <span className={`text-transparent bg-clip-text bg-linear-to-b ${COLOR_PALETTES[colorIndex]}`}>
                     {padTime(second)}
                   </span>
                   <span className="text-xs uppercase font-bold tracking-widest text-slate-500 mt-2 group-hover:text-indigo-400/70">secs</span>

@@ -44,6 +44,7 @@ const TaskList = () => {
       );
     } catch (error) {
       // Fallback fallback mechanism to keep state running locally if api structure differs
+      console.log(error)
       setTasks((prev) =>
         prev.map((t) => (t._id === id ? { ...t, completed: !currentStatus } : t))
       );
@@ -55,6 +56,7 @@ const TaskList = () => {
       await axios.delete(`/api/tasks/${id}`); 
       setTasks((prev) => prev.filter((task) => task._id !== id));
     } catch (error) {
+      console.log(error)
       setTasks((prev) => prev.filter((task) => task._id !== id));
     }
   };
@@ -67,10 +69,10 @@ const TaskList = () => {
 
       <div className="relative z-10 space-y-6 text-left max-w-md mx-auto">
         <header className="space-y-2 text-center">
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-slate-200 via-slate-400 to-slate-200">
             Clear your mind,
           </h1>
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">
             organize your day
           </h2>
         </header>
@@ -79,7 +81,7 @@ const TaskList = () => {
         <TaskInput addTask={addTask} />
 
         {/* Tasks List Wrapper */}
-        <div className="space-y-3 max-h-[380px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
+        <div className="space-y-3 max-h-95 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
           {tasks.length === 0 ? (
             <p className="text-center text-slate-500 text-sm py-8">No tasks for today. Add one above!</p>
           ) : (
