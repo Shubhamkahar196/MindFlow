@@ -20,8 +20,8 @@ const COLOR_PALETTES = [
 
 const Hours = () => {
   // Core states
-  const [hour, setHour] = useState(45);
-  const [min, setMinute] = useState(0);
+  const [hour, setHour] = useState(0);
+  const [min, setMinute] = useState(45);
   const [second, setSecond] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
