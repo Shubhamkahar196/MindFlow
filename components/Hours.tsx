@@ -27,10 +27,9 @@ const Hours = () => {
 
   // Edit Mode states
   const [isEditing, setIsEditing] = useState(false);
-  const [editHour, setEditHour] = useState("01")
+  const [editHour, setEditHour] = useState("01");
   const [editMin, setEditMin] = useState("00");
   const [editSec, setEditSec] = useState("00");
-
 
   const [blinkSec, setBlinkSec] = useState(false);
   const [blinkMin, setBlinkMin] = useState(false);
@@ -40,37 +39,51 @@ const Hours = () => {
 
   const prevMinRef = useRef(min);
   const prevHourRef = useRef(hour);
+  
+  // Refs to calculate accurate delta time
+  const endTimeRef = useRef<number | null>(null);
+  const timeLeftRef = useRef<number>(0);
 
-  // Countdown Interval logic
+  // Countdown Interval logic with high-accuracy timestamp calculation
   useEffect(() => {
     let timerInterval: NodeJS.Timeout;
 
     if (isRunning && !isEditing) {
-      timerInterval = setInterval(() => {
-        setSecond((prevSec) => {
-          setBlinkSec(true);
-          setTimeout(() => setBlinkSec(false), 200);
-          setColorIndex((prev) => (prev + 1) % COLOR_PALETTES.length);
+      // Calculate total seconds remaining right now
+      const totalSecondsLeft = hour * 3600 + min * 60 + second;
+      
+      // Calculate exactly when this session should hit 0
+      endTimeRef.current = Date.now() + totalSecondsLeft * 1000;
 
-          if (prevSec <= 0) {
-            setMinute((prevMin) => {
-              if (prevMin <= 0) {
-                setHour((prevHour) => {
-                  if (prevHour <= 0) {
-                    setIsRunning(false);
-                    clearInterval(timerInterval);
-                    return 0;
-                  }
-                  return prevHour - 1;
-                });
-                return 59;
-              }
-              return prevMin - 1;
-            });
-            return 59;
-          }
-          return prevSec - 1;
-        });
+      timerInterval = setInterval(() => {
+        if (!endTimeRef.current) return;
+
+        // Find how many milliseconds are genuinely left
+        const msLeft = endTimeRef.current - Date.now();
+        
+        if (msLeft <= 0) {
+          setHour(0);
+          setMinute(0);
+          setSecond(0);
+          setIsRunning(false);
+          clearInterval(timerInterval);
+          return;
+        }
+
+        // Convert ms back to hours, minutes, and seconds
+        const totalSecs = Math.ceil(msLeft / 1000);
+        const h = Math.floor(totalSecs / 3600);
+        const m = Math.floor((totalSecs % 3600) / 60);
+        const s = totalSecs % 60;
+
+        // Visual animation triggers
+        setBlinkSec(true);
+        setTimeout(() => setBlinkSec(false), 200);
+        setColorIndex((prev) => (prev + 1) % COLOR_PALETTES.length);
+
+        setHour(h);
+        setMinute(m);
+        setSecond(s);
       }, 1000);
     }
 
@@ -80,21 +93,26 @@ const Hours = () => {
   // Handle Minute change for Quotes and Blink
   useEffect(() => {
     if (min !== prevMinRef.current) {
-      setBlinkMin(true);
-      setTimeout(() => setBlinkMin(false), 500);
+      // Avoid triggering changes when resetting or moving backwards drastically
+      if (isRunning) {
+        setBlinkMin(true);
+        setTimeout(() => setBlinkMin(false), 500);
+        setQuoteIndex((prev) => (prev + 1) % MOTIVATIONAL_QUOTES.length);
+      }
       prevMinRef.current = min;
-      setQuoteIndex((prev) => (prev + 1) % MOTIVATIONAL_QUOTES.length);
     }
-  }, [min]);
+  }, [min, isRunning]);
 
   // Handle Hour Change Blink
   useEffect(() => {
     if (hour !== prevHourRef.current) {
-      setBlinkHour(true);
-      setTimeout(() => setBlinkHour(false), 500);
+      if (isRunning) {
+        setBlinkHour(true);
+        setTimeout(() => setBlinkHour(false), 500);
+      }
       prevHourRef.current = hour;
     }
-  }, [hour]);
+  }, [hour, isRunning]);
 
   // Save changes from Edit Mode
   const saveSessionTime = () => {
@@ -109,7 +127,7 @@ const Hours = () => {
   };
 
   const openEditMode = () => {
-    setIsRunning(false); // Edit karte waqt timer pause ho jaye
+    setIsRunning(false); 
     setEditHour(String(hour).padStart(2, '0'));
     setEditMin(String(min).padStart(2, '0'));
     setEditSec(String(second).padStart(2, '0'));
@@ -183,7 +201,6 @@ const Hours = () => {
           ) : (
            
             <div>
-  
               <div 
                 onClick={openEditMode}
                 className="flex items-center justify-center gap-4 sm:gap-6 font-black text-6xl sm:text-7xl md:text-8xl tabular-nums tracking-tighter cursor-pointer group title-edit-trigger"
@@ -218,7 +235,6 @@ const Hours = () => {
                 💡 Tip: Click any number above to edit your session time.
               </p>
 
-     
               <div className="flex items-center justify-center gap-4 mt-10">
                 {isRunning ? (
                   /* Pause Button */
@@ -230,7 +246,6 @@ const Hours = () => {
                     <span>Pause</span>
                   </button>
                 ) : (
-                 
                   <button
                     onClick={() => setIsRunning(true)}
                     className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl px-6 py-3 transition duration-200 shadow-lg shadow-indigo-500/20 cursor-pointer text-sm"
@@ -238,10 +253,8 @@ const Hours = () => {
                     <Play className="h-4 w-4 fill-white" />
                     <span>{hour === 0 && min === 0 && second === 0 ? "Start" : "Resume"}</span>
                   </button>
-                )
-                }
+                )}
 
-                
                 <button
                   onClick={() => {
                     setIsRunning(false);
@@ -257,7 +270,6 @@ const Hours = () => {
               </div>
             </div>
           )}
-
         </main>
       </div>
     </div>
