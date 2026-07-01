@@ -1,4 +1,4 @@
-import mongoose,  {  Schema } from "mongoose";
+import mongoose,  {  Schema ,InferSchemaType} from "mongoose";
 
 
 const userSchema = new Schema({
@@ -16,6 +16,8 @@ const userSchema = new Schema({
     default: "google"
    }
 },{timestamps: true})
+
+export type User = InferSchemaType<typeof userSchema>;
 
 const User = mongoose.models.User ||  mongoose.model("User",userSchema);
 
